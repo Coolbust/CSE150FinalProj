@@ -108,31 +108,35 @@ class Final (object):
         msg.actions.append(of.ofp_action_output(port = out))
         self.connection.send(msg)
         
-        # # If trying to send to web server drop
-        # msg = of.ofp_flow_mod()
-        # msg.match.dl_type = 0x800
-        # msg.match.nw_dst = '30.1.4.66'
-        # self.connection.send(msg)
-
-        # # If trying to send to web server drop
-        # msg = of.ofp_flow_mod()
-        # msg.match.dl_type = 0x806
-        # msg.match.nw_dst = '30.1.4.66'
-        # self.connection.send(msg)
         # #  End trust host -----------------------------------------------
       #elif switch_id ==5 and port_on_switch
-      if switch_id != 5 and port_on_switch != 6:
-        # Blocking of untrusted host
+
+      if switch_id == 6:
+        # Web server blcks Thost
+        print("in web")
         msg = of.ofp_flow_mod()
         msg.match.dl_type = 0x0800 #ICMP
-        msg.match.nw_dst = '108.44.83.103'
+        msg.match.nw_dst = '104.24.32.100'
         self.connection.send(msg)
 
         msg = of.ofp_flow_mod()
         msg.match.dl_type = 0x0806 #ARP
-        msg.match.nw_dst = '108.44.83.103'
+        msg.match.nw_dst = '104.24.32.100'
         self.connection.send(msg)
-        # End of blocking of untrusted host
+
+
+      if switch_id != 5 and port_on_switch != 6:
+          # Blocking of untrusted host
+          msg = of.ofp_flow_mod()
+          msg.match.dl_type = 0x0800 #ICMP
+          msg.match.nw_dst = '108.44.83.103'
+          self.connection.send(msg)
+
+          msg = of.ofp_flow_mod()
+          msg.match.dl_type = 0x0806 #ARP
+          msg.match.nw_dst = '108.44.83.103'
+          self.connection.send(msg)
+          # End of blocking of untrusted host
 
       # Start ping all 
       # ICMP pingall should pass
