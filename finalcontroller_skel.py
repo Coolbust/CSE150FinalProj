@@ -55,28 +55,76 @@ class Final (object):
     #      (for example, s1 would have switch_id == 1, s2 would have switch_id == 2, etc...)
     # You should use these to determine where a packet came from. To figure out where a packet 
     # is going, you can use the IP header information.
+    if switch_id != 4:
+      # Start ping all 
+      # ICMP pingall should pass
+      msg = of.ofp_flow_mod()
+      msg.match.dl_type = 0x0800 #ICMP
+      msg.match.nw_proto = 1
+      out = of.OFPP_NORMAL
+      msg.actions.append(of.ofp_action_output(port = out))
+      self.connection.send(msg)
 
-    # ICMP pingall should pass
-    msg = of.ofp_flow_mod()
-    msg.match.dl_type = 0x0800 #ICMP
-    msg.match.nw_proto = 1
-    out = of.OFPP_NORMAL
-    msg.actions.append(of.ofp_action_output(port = out))
-    self.connection.send(msg)
+      # Any any arp, accept
+      msg = of.ofp_flow_mod()
+      msg.match.dl_type = 0x0806 #ARP
+      out = of.OFPP_NORMAL
+      msg.actions.append(of.ofp_action_output(port = out))
+      self.connection.send(msg)
+      #End ping all
 
-     # Any any arp, accept
-    msg = of.ofp_flow_mod()
-    msg.match.dl_type = 0x0806 #ARP
-    out = of.OFPP_NORMAL
-    msg.actions.append(of.ofp_action_output(port = out))
-    self.connection.send(msg)
+      #any other ipv4 drop
+      msg = of.ofp_flow_mod()
+      msg.match.dl_type = 0x0800 
+      match = of.ofp_match()
+      msg.match = match
+      self.connection.send(msg)
 
-    #any other ipv4 drop
-    msg = of.ofp_flow_mod()
-    msg.match.dl_type = 0x0800 
-    match = of.ofp_match()
-    msg.match = match
-    self.connection.send(msg)
+
+    if switch_id == 4 and port_on_switch == 1:
+      # Start ping all 
+      # ICMP pingall should pass
+      # print("In switch 4 port 1")
+      msg = of.ofp_flow_mod()
+      msg.match.dl_type = 0x0800 #ICMP
+      msg.match.nw_proto = 1
+      msg.match.nw_dst = '40.2.5.10'
+      out = of.OFPP_NORMAL
+      msg.actions.append(of.ofp_action_output(port = out))
+      self.connection.send(msg)
+
+      # Any any arp, accept
+      msg = of.ofp_flow_mod()
+      msg.match.dl_type = 0x0806 #ARP
+      msg.match.nw_dst = '40.2.5.10'
+      out = of.OFPP_NORMAL
+      msg.actions.append(of.ofp_action_output(port = out))
+      self.connection.send(msg)
+      #End ping all
+
+
+    if switch_id == 4 and port_on_switch == 2:
+      # Start ping all 
+      # ICMP pingall should pass
+      # print("In switch 4 port 2")
+      msg = of.ofp_flow_mod()
+      msg.match.dl_type = 0x0800 #ICMP
+      msg.match.nw_proto = 1
+      msg.match.nw_dst = '40.2.5.0'
+      out = of.OFPP_NORMAL
+      msg.actions.append(of.ofp_action_output(port = out))
+      self.connection.send(msg)
+
+      # Any any arp, accept
+      msg = of.ofp_flow_mod()
+      msg.match.dl_type = 0x0806 #ARP
+      msg.match.nw_dst = '40.2.5.0'
+      out = of.OFPP_NORMAL
+      msg.actions.append(of.ofp_action_output(port = out))
+      self.connection.send(msg)
+      #End ping all
+    
+
 
 
   def _handle_PacketIn (self, event):
