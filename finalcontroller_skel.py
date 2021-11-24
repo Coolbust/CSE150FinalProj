@@ -124,6 +124,24 @@ class Final (object):
         msg.match.nw_dst = '104.24.32.100'
         self.connection.send(msg)
 
+      if switch_id == 1:
+        # Floor 1 switch 1 blocks thost icmp
+        msg = of.ofp_flow_mod()
+        msg.match.dl_type = 0x0800 #ICMP
+        msg.match.nw_dst = '104.24.32.100'
+        self.connection.send(msg)
+
+      if switch_id == 2:
+        # floor 1 switch 2 blocks switch 1
+        msg = of.ofp_flow_mod()
+        msg.match.dl_type = 0x0800 #ICMP
+        msg.match.nw_dst = '20.2.1.10'
+        self.connection.send(msg)
+
+        msg = of.ofp_flow_mod()
+        msg.match.dl_type = 0x0800 #ICMP
+        msg.match.nw_dst = '20.2.1.20'
+        self.connection.send(msg)
 
       if switch_id != 5 and port_on_switch != 6:
           # Blocking of untrusted host
