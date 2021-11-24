@@ -92,10 +92,10 @@ class final_topo(Topo):
     self.addLink(webserver,datasw)
 
     #Trusted Host 
-    thost = self.addHost('thost',mac='00:00:00:00:00:09',ip='104.24.32.100/24',defaultRoute="thost-eth0")
+    thost = self.addHost('thost',mac='00:00:00:00:00:09',ip='104.24.32.100',defaultRoute="thost-eth0")
 
     #Untrusted Host
-    uhost = self.addHost('unthost',mac='00:00:00:00:00:10',ip='108.44.83.103/24',defaultRoute="unthost-eth0")
+    uhost = self.addHost('unthost',mac='00:00:00:00:00:10',ip='108.44.83.103',defaultRoute="unthost-eth0")
 
 
     # testing core 
@@ -107,8 +107,8 @@ class final_topo(Topo):
     self.addLink(core,f2sw1)
     self.addLink(core,agfsw1)
     self.addLink(core,datasw)
-    self.addLink(core,thost)
-    self.addLink(core,uhost)
+    self.addLink(core,thost, port1=6,port2=0)
+    self.addLink(core,uhost, port1=7,port2=0)
 
 def configure():
   topo = final_topo()
