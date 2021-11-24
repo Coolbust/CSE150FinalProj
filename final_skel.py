@@ -41,16 +41,16 @@ class final_topo(Topo):
 
     f1sw1 = self.addSwitch('s1')
 
-    laptop  = self.addHost('h1',mac='00:00:00:00:00:01',ip='20.2.1.10', defaultRoute="h1-eth0")
-    labmachine = self.addHost('h2',mac='00:00:00:00:00:02',ip='20.2.1.20', defaultRoute="h2-eth0")
+    laptop  = self.addHost('laptop',mac='00:00:00:00:00:01',ip='20.2.1.10', defaultRoute="laptop-eth0")
+    labmachine = self.addHost('lbmachine',mac='00:00:00:00:00:02',ip='20.2.1.20', defaultRoute="lbmachine-eth0")
 
     self.addLink(laptop,f1sw1)
     self.addLink(labmachine,f1sw1)
 
     # Floor 1 switch 2
     #setting up floor 2 devices connected to switch 2
-    device1 = self.addHost('h3',mac='00:00:00:00:00:03',ip='20.2.1.30/24', defaultRoute="h3-eth0")
-    device2 = self.addHost('h4',mac='00:00:00:00:00:04',ip='20.2.1.40/24', defaultRoute="h4-eth0")
+    device1 = self.addHost('device1',mac='00:00:00:00:00:03',ip='20.2.1.30/24', defaultRoute="device1-eth0")
+    device2 = self.addHost('device2',mac='00:00:00:00:00:04',ip='20.2.1.40/24', defaultRoute="device2-eth0")
 
     #floor 1 switch 2 for device1 and device 2
     f1sw2 = self.addSwitch('s2')
@@ -62,8 +62,8 @@ class final_topo(Topo):
     #-----------------------------------------------------end floor 1
     
     #setting up floor 2 hosts
-    host1 = self.addHost('h5',mac='00:00:00:00:00:05',ip='10.2.7.10/24', defaultRoute="h5-eth0")
-    host2 = self.addHost('h6',mac='00:00:00:00:00:06',ip='10.2.7.20/24', defaultRoute="h6-eth0")
+    host1 = self.addHost('host1',mac='00:00:00:00:00:05',ip='10.2.7.10', defaultRoute="host1-eth0")
+    host2 = self.addHost('host2',mac='00:00:00:00:00:06',ip='10.2.7.20', defaultRoute="host2-eth0")
 
     #floor 2 switch 1 for h1 and h2
     f2sw1 = self.addSwitch('s3')
