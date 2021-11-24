@@ -1,0 +1,4 @@
+Annoying commands
+
+sudo ~/pox/pox.py misc.finalcontroller_skel
+sudo python ~/final_skel.py
