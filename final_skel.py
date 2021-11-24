@@ -72,12 +72,14 @@ class final_topo(Topo):
     self.addLink(host2,f2sw1)
 
     #setting up air-gapped floor
-    secureclients = self.addHost('h7',mac='00:00:00:00:00:07',ip='40.2.5.0/29',defaultRoute="h7-eth0")
+    secureclient1 = self.addHost('sec1',mac='00:00:00:00:00:07',ip='40.2.5.0',defaultRoute="sec1-eth0")
+    secureclient2 = self.addHost('sec2',mac='00:00:00:00:00:11',ip='40.2.5.10',defaultRoute="sec2-eth0")
 
     #switch for airgapped floor
     agfsw1 = self.addSwitch('s4')
 
-    self.addLink(secureclients,agfsw1)
+    self.addLink(agfsw1,secureclient1,port1=1,port2=0)
+    self.addLink(agfsw1,secureclient2,port1=2,port2=0)
 
     #---------------------------------------------------end floor 2 and agf
     
@@ -100,19 +102,18 @@ class final_topo(Topo):
 
     core = self.addSwitch('s5')
 
-    self.addLink(f1sw1,core)
-    self.addLink(f1sw2,core)
-    self.addLink(f2sw1,core)
-    self.addLink(agfsw1,core)
-    self.addLink(datasw,core)
-    self.addLink(thost,core)
-    self.addLink(uhost,core)
+    self.addLink(core, f1sw1)
+    self.addLink(core, f1sw2)
+    self.addLink(core,f2sw1)
+    self.addLink(core,agfsw1)
+    self.addLink(core,datasw)
+    self.addLink(core,thost)
+    self.addLink(core,uhost)
 
 def configure():
   topo = final_topo()
   net = Mininet(topo=topo, controller=RemoteController)
   net.start()
-  laptop, labmachine = net.get('h1','h2')
   CLI(net)
   
   net.stop()
