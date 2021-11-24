@@ -56,6 +56,61 @@ class Final (object):
     # You should use these to determine where a packet came from. To figure out where a packet 
     # is going, you can use the IP header information.
     if switch_id != 4:
+      #Untrusted Host cannot send ICMP traffic to any of the devices
+    # on floor1 and floor2, or the Web Server.
+    #Untrusted Host cannot send any IP traffic to the Web Server.
+      if switch_id == 5 and port_on_switch == 7:
+        print("Switch 5 port 7")
+        msg = of.ofp_flow_mod()
+        msg.match.dl_type = 0x0800 #ICMP
+        msg.match.nw_dst = '104.24.32.100'
+        out = of.OFPP_NORMAL
+        msg.actions.append(of.ofp_action_output(port = out))
+        self.connection.send(msg)
+
+        # Any any arp, accept
+        msg = of.ofp_flow_mod()
+        msg.match.dl_type = 0x0806 #ARP
+        msg.match.nw_dst = '104.24.32.100'
+        out = of.OFPP_NORMAL
+        msg.actions.append(of.ofp_action_output(port = out))
+        self.connection.send(msg)
+
+
+        # #any other ipv4 drop
+        # msg = of.ofp_flow_mod()
+        # msg.match.dl_type = 0x0800 
+        # match = of.ofp_match()
+        # msg.match = match
+        # self.connection.send(msg)
+        # End untrust host -----------------------------------------------
+
+      if switch_id == 5 and port_on_switch == 6:
+        print("Switch 5 port 6")
+        msg = of.ofp_flow_mod()
+        msg.match.dl_type = 0x0800 #ICMP
+        msg.match.nw_dst = '108.44.83.103'
+        out = of.OFPP_NORMAL
+        msg.actions.append(of.ofp_action_output(port = out))
+        self.connection.send(msg)
+
+        # Any any arp, accept
+        msg = of.ofp_flow_mod()
+        msg.match.dl_type = 0x0806 #ARP
+        msg.match.nw_dst = '108.44.83.103'
+        out = of.OFPP_NORMAL
+        msg.actions.append(of.ofp_action_output(port = out))
+        self.connection.send(msg)
+
+        # #any other ipv4 drop
+        # msg = of.ofp_flow_mod()
+        # msg.match.dl_type = 0x0800 
+        # match = of.ofp_match()
+        # msg.match = match
+        # self.connection.send(msg)
+        # # End trust host -----------------------------------------------
+
+
       # Start ping all 
       # ICMP pingall should pass
       msg = of.ofp_flow_mod()
@@ -80,7 +135,7 @@ class Final (object):
       msg.match = match
       self.connection.send(msg)
 
-
+    # Secure Floor Flow Table ---------------------------------
     if switch_id == 4 and port_on_switch == 1:
       # Start ping all 
       # ICMP pingall should pass
@@ -123,7 +178,11 @@ class Final (object):
       msg.actions.append(of.ofp_action_output(port = out))
       self.connection.send(msg)
       #End ping all
+    # End Secure Floor -------------------------------------------------
+
+    # ------------------------------
     
+
 
 
 
