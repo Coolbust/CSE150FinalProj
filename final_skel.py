@@ -41,8 +41,8 @@ class final_topo(Topo):
 
     f1sw1 = self.addSwitch('s1')
 
-    laptop  = self.addHost('h1',mac='00:00:00:00:00:01',ip='20.2.1.10/24', defaultRoute="h1-eth0")
-    labmachine = self.addHost('h2',mac='00:00:00:00:00:02',ip='20.2.1.20/24', defaultRoute="h2-eth0")
+    laptop  = self.addHost('h1',mac='00:00:00:00:00:01',ip='20.2.1.10', defaultRoute="h1-eth0")
+    labmachine = self.addHost('h2',mac='00:00:00:00:00:02',ip='20.2.1.20', defaultRoute="h2-eth0")
 
     self.addLink(laptop,f1sw1)
     self.addLink(labmachine,f1sw1)
@@ -84,7 +84,7 @@ class final_topo(Topo):
     #---------------------------------------------------end floor 2 and agf
     
     #setting up webserver and data center switch
-    webserver = self.addHost('webserver',mac='00:00:00:00:00:08',ip='30.1.4.66/24',defaultRoute="webserver-eth0")
+    webserver = self.addHost('webserver',mac='00:00:00:00:00:08',ip='30.1.4.66',defaultRoute="webserver-eth0")
 
     #date center switch
     datasw = self.addSwitch('s6')
