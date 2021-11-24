@@ -83,7 +83,7 @@ class Final (object):
         msg.match = match
         self.connection.send(msg)
 
-        #any other ipv4 drop
+        #any other arg drop
         msg = of.ofp_flow_mod()
         msg.match.dl_type = 0x0806
         match = of.ofp_match()
@@ -107,8 +107,21 @@ class Final (object):
         out = of.OFPP_NORMAL
         msg.actions.append(of.ofp_action_output(port = out))
         self.connection.send(msg)
-        #  End trust host -----------------------------------------------
-      elif port_on_switch != 6 and port_on_switch !=7:
+        
+        # # If trying to send to web server drop
+        # msg = of.ofp_flow_mod()
+        # msg.match.dl_type = 0x800
+        # msg.match.nw_dst = '30.1.4.66'
+        # self.connection.send(msg)
+
+        # # If trying to send to web server drop
+        # msg = of.ofp_flow_mod()
+        # msg.match.dl_type = 0x806
+        # msg.match.nw_dst = '30.1.4.66'
+        # self.connection.send(msg)
+        # #  End trust host -----------------------------------------------
+      #elif switch_id ==5 and port_on_switch
+      if switch_id != 5 and port_on_switch != 6:
         # Blocking of untrusted host
         msg = of.ofp_flow_mod()
         msg.match.dl_type = 0x0800 #ICMP
