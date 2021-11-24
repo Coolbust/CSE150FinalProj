@@ -75,6 +75,20 @@ class Final (object):
         out = of.OFPP_NORMAL
         msg.actions.append(of.ofp_action_output(port = out))
         self.connection.send(msg)
+
+        #any other ipv4 drop
+        msg = of.ofp_flow_mod()
+        msg.match.dl_type = 0x0800 
+        match = of.ofp_match()
+        msg.match = match
+        self.connection.send(msg)
+
+        #any other ipv4 drop
+        msg = of.ofp_flow_mod()
+        msg.match.dl_type = 0x0806
+        match = of.ofp_match()
+        msg.match = match
+        self.connection.send(msg)
         # End untrust host -----------------------------------------------
 
       elif switch_id == 5 and port_on_switch == 6:
