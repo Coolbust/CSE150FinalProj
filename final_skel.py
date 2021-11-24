@@ -33,101 +33,86 @@ class final_topo(Topo):
     #
     # self.addLink(s1,h1, port1=8, port2=0)
     # self.addLink(s1,h2, port1=9, port2=0)
-
-    print "Delete me!"
-
+        #self.addLink(f1sw1,laptop, port1=1,port2=0)
+    #self.addLink(f1sw1,labmachine,port1=2,port2=0)
+  
+    # ------------------------------------------ Creating and testing floor 1
     # Setting up floor 1 devices
-    laptop  = self.addHost('laptop',mac='00:00:00:00:00:01',ip='20.2.1.10/24')
-    labmachine = self.addHost('lab machine',mac='00:00:00:00:00:02',ip='20.2.1.20/24')
 
-    #floor 1 switch one for the laptop and lab machine
-    floor1switch1 = self.addSwitch('f1s1')
+    f1sw1 = self.addSwitch('s1')
 
+    laptop  = self.addHost('h1',mac='00:00:00:00:00:01',ip='20.2.1.10/24', defaultRoute="h1-eth0")
+    labmachine = self.addHost('h2',mac='00:00:00:00:00:02',ip='20.2.1.20/24', defaultRoute="h2-eth0")
+
+    self.addLink(laptop,f1sw1)
+    self.addLink(labmachine,f1sw1)
+
+    # Floor 1 switch 2
     #setting up floor 2 devices connected to switch 2
-    device1 = self.addHost('device1',mac='00:00:00:00:00:03',ip='20.2.1.30/24')
-    device2 = self.addHost('device2',mac='00:00:00:00:00:04',ip='20.2.1.40/24')
+    device1 = self.addHost('h3',mac='00:00:00:00:00:03',ip='20.2.1.30/24', defaultRoute="h3-eth0")
+    device2 = self.addHost('h4',mac='00:00:00:00:00:04',ip='20.2.1.40/24', defaultRoute="h4-eth0")
 
     #floor 1 switch 2 for device1 and device 2
-    floor1switch2 = self.addSwitch('f1s2')
+    f1sw2 = self.addSwitch('s2')
+
+    self.addLink(device1,f1sw2)
+    self.addLink(device2,f1sw2)
+
 
     #-----------------------------------------------------end floor 1
     
     #setting up floor 2 hosts
-    host1 = self.addHost('h1',mac='00:00:00:00:00:05',ip='10.2.7.10/24')
-    host2 = self.addHost('h2',mac='00:00:00:00:00:06',ip='10.2.7.20/24')
+    host1 = self.addHost('h5',mac='00:00:00:00:00:05',ip='10.2.7.10/24', defaultRoute="h5-eth0")
+    host2 = self.addHost('h6',mac='00:00:00:00:00:06',ip='10.2.7.20/24', defaultRoute="h6-eth0")
 
     #floor 2 switch 1 for h1 and h2
-    floor2switch1 = self.addSwitch('f2s1')
+    f2sw1 = self.addSwitch('s3')
+
+    self.addLink(host1,f2sw1)
+    self.addLink(host2,f2sw1)
 
     #setting up air-gapped floor
-    secureclients = self.addHost('h1',mac='00:00:00:00:00:07',ip='40.2.5.0/29')
+    secureclients = self.addHost('h7',mac='00:00:00:00:00:07',ip='40.2.5.0/29',defaultRoute="h7-eth0")
 
     #switch for airgapped floor
-    agfswitch1 = self.addSwitch('agfs1')
+    agfsw1 = self.addSwitch('s4')
+
+    self.addLink(secureclients,agfsw1)
 
     #---------------------------------------------------end floor 2 and agf
     
     #setting up webserver and data center switch
-    webserver = self.addHost('webserver',mac='00:00:00:00:00:08',ip='30.1.4.66/24')
+    webserver = self.addHost('webserver',mac='00:00:00:00:00:08',ip='30.1.4.66/24',defaultRoute="webserver-eth0")
 
     #date center switch
-    dataswitch = self.addSwitch('datacs')
+    datasw = self.addSwitch('s6')
 
+    self.addLink(webserver,datasw)
 
     #Trusted Host 
-    thost = self.addHost('trusted host',mac='00:00:00:00:00:09',ip='104.24.32.100/24')
+    thost = self.addHost('thost',mac='00:00:00:00:00:09',ip='104.24.32.100/24',defaultRoute="thost-eth0")
 
     #Untrusted Host
-    uhost = self.addHost('untrusted host',mac='00:00:00:00:00:10',ip='108.44.83.103/24')
+    uhost = self.addHost('unthost',mac='00:00:00:00:00:10',ip='108.44.83.103/24',defaultRoute="unthost-eth0")
 
-    #---------------------------------------------------end devices
 
-    #Creating core switch
+    # testing core 
 
-    core = self.addSwitch('core')
-    
-    # Switch Connecting ---------------------------------------------------
+    core = self.addSwitch('s5')
 
-    #Connecting switches
-
-    #Floor 1 part 1
-    self.addLink(laptop,floor1switch1)
-    self.addLink(labmachine,floor1switch1)
-    
-    #Floor 1 part 2
-    self.addLink(device1,floor1switch2)
-    self.addLink(device2,floor1switch2)
-
-    #Floor 2
-    self.addLink(host1,floor2switch1)
-    self.addLink(host2,floor2switch1)
-
-    #Floor agf
-    self.addLink(secureclients, agfswitch1)
-
-    #Web server switch
-    self.addLink(webserver,dataswitch)
-
-    #connecting the switches to the core
-    self.addLink(floor1switch1,core)
-    self.addLink(floor1switch2,core)
-    self.addLink(floor2switch1,core)
-    self.addLink(agfswitch1,core)
-    self.addLink(dataswitch,core)
-
-    #connecting the hosts directly
+    self.addLink(f1sw1,core)
+    self.addLink(f1sw2,core)
+    self.addLink(f2sw1,core)
+    self.addLink(agfsw1,core)
+    self.addLink(datasw,core)
     self.addLink(thost,core)
     self.addLink(uhost,core)
 
-    #end topo
-
-
 def configure():
-
   topo = final_topo()
   net = Mininet(topo=topo, controller=RemoteController)
   net.start()
-
+  laptop, labmachine = net.get('h1','h2')
   CLI(net)
   
   net.stop()
