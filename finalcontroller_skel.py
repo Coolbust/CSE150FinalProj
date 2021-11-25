@@ -124,6 +124,7 @@ class Final (object):
         msg.match.nw_dst = '104.24.32.100'
         self.connection.send(msg)
 
+
       if switch_id == 1:
         # Floor 1 switch 1 blocks thost icmp
         msg = of.ofp_flow_mod()
@@ -198,6 +199,104 @@ class Final (object):
       msg.match.dl_type = 0x0800 
       match = of.ofp_match()
       msg.match = match
+      self.connection.send(msg)
+
+    if switch_id == 4:
+      msg = of.ofp_flow_mod()
+      msg.match.dl_type = 0x0800 #ICMP
+      msg.match.nw_proto = 1
+      msg.match.nw_dst = '40.2.5.10'
+      out = of.OFPP_NORMAL
+      msg.actions.append(of.ofp_action_output(port = out))
+      self.connection.send(msg)
+
+      # Any any arp, accept
+      msg = of.ofp_flow_mod()
+      msg.match.dl_type = 0x0806 #ARP
+      msg.match.nw_dst = '40.2.5.10'
+      out = of.OFPP_NORMAL
+      msg.actions.append(of.ofp_action_output(port = out))
+      self.connection.send(msg)
+      #End ping all
+
+      msg = of.ofp_flow_mod()
+      msg.match.dl_type = 0x0800 #ICMP
+      msg.match.nw_proto = 1
+      msg.match.nw_dst = '40.2.5.0'
+      out = of.OFPP_NORMAL
+      msg.actions.append(of.ofp_action_output(port = out))
+      self.connection.send(msg)
+
+      # Any any arp, accept
+      msg = of.ofp_flow_mod()
+      msg.match.dl_type = 0x0806 #ARP
+      msg.match.nw_dst = '40.2.5.0'
+      out = of.OFPP_NORMAL
+      msg.actions.append(of.ofp_action_output(port = out))
+      self.connection.send(msg)
+
+      msg = of.ofp_flow_mod()
+      msg.match.dl_type = 0x0800 #ICMP
+      msg.match.nw_proto = 1
+      msg.match.nw_dst = '40.2.5.20'
+      out = of.OFPP_NORMAL
+      msg.actions.append(of.ofp_action_output(port = out))
+      self.connection.send(msg)
+
+      # Any any arp, accept
+      msg = of.ofp_flow_mod()
+      msg.match.dl_type = 0x0806 #ARP
+      msg.match.nw_dst = '40.2.5.20'
+      out = of.OFPP_NORMAL
+      msg.actions.append(of.ofp_action_output(port = out))
+      self.connection.send(msg)
+
+      msg = of.ofp_flow_mod()
+      msg.match.dl_type = 0x0800 #ICMP
+      msg.match.nw_proto = 1
+      msg.match.nw_dst = '40.2.5.30'
+      out = of.OFPP_NORMAL
+      msg.actions.append(of.ofp_action_output(port = out))
+      self.connection.send(msg)
+
+      # Any any arp, accept
+      msg = of.ofp_flow_mod()
+      msg.match.dl_type = 0x0806 #ARP
+      msg.match.nw_dst = '40.2.5.30'
+      out = of.OFPP_NORMAL
+      msg.actions.append(of.ofp_action_output(port = out))
+      self.connection.send(msg)
+
+      msg = of.ofp_flow_mod()
+      msg.match.dl_type = 0x0800 #ICMP
+      msg.match.nw_proto = 1
+      msg.match.nw_dst = '40.2.5.40'
+      out = of.OFPP_NORMAL
+      msg.actions.append(of.ofp_action_output(port = out))
+      self.connection.send(msg)
+
+      # Any any arp, accept
+      msg = of.ofp_flow_mod()
+      msg.match.dl_type = 0x0806 #ARP
+      msg.match.nw_dst = '40.2.5.40'
+      out = of.OFPP_NORMAL
+      msg.actions.append(of.ofp_action_output(port = out))
+      self.connection.send(msg)
+
+      msg = of.ofp_flow_mod()
+      msg.match.dl_type = 0x0800 #ICMP
+      msg.match.nw_proto = 1
+      msg.match.nw_dst = '40.2.5.50'
+      out = of.OFPP_NORMAL
+      msg.actions.append(of.ofp_action_output(port = out))
+      self.connection.send(msg)
+
+      # Any any arp, accept
+      msg = of.ofp_flow_mod()
+      msg.match.dl_type = 0x0806 #ARP
+      msg.match.nw_dst = '40.2.5.50'
+      out = of.OFPP_NORMAL
+      msg.actions.append(of.ofp_action_output(port = out))
       self.connection.send(msg)
 
     # Secure Floor Flow Table ---------------------------------
