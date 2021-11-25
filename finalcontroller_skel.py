@@ -101,12 +101,12 @@ class Final (object):
         self.connection.send(msg)
 
         # Any any arp, accept
-        msg = of.ofp_flow_mod()
-        msg.match.dl_type = 0x0806 #ARP
-        msg.match.nw_dst = '108.44.83.103'
-        out = of.OFPP_NORMAL
-        msg.actions.append(of.ofp_action_output(port = out))
-        self.connection.send(msg)
+        # msg = of.ofp_flow_mod()
+        # msg.match.dl_type = 0x0806 #ARP
+        # msg.match.nw_dst = '108.44.83.103'
+        # out = of.OFPP_NORMAL
+        # msg.actions.append(of.ofp_action_output(port = out))
+        # self.connection.send(msg)
         
         # #  End trust host -----------------------------------------------
       #elif switch_id ==5 and port_on_switch
@@ -299,7 +299,7 @@ class Final (object):
       msg.actions.append(of.ofp_action_output(port = out))
       self.connection.send(msg)
 
-    # Secure Floor Flow Table ---------------------------------
+    # Secure Floor Flow Table extra code (not needed)---------------------------------
     if switch_id == 4 and port_on_switch == 1:
       # Start ping all 
       # ICMP pingall should pass
