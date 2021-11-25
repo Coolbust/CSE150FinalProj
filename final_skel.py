@@ -74,12 +74,20 @@ class final_topo(Topo):
     #setting up air-gapped floor
     secureclient1 = self.addHost('sec1',mac='00:00:00:00:00:07',ip='40.2.5.0',defaultRoute="sec1-eth0")
     secureclient2 = self.addHost('sec2',mac='00:00:00:00:00:11',ip='40.2.5.10',defaultRoute="sec2-eth0")
+    secureclient3 = self.addHost('sec3',mac='00:00:00:00:00:12',ip='40.2.5.20',defaultRoute="sec3-eth0")
+    secureclient4 = self.addHost('sec4',mac='00:00:00:00:00:13',ip='40.2.5.30',defaultRoute="sec4-eth0")
+    secureclient5 = self.addHost('sec5',mac='00:00:00:00:00:14',ip='40.2.5.40',defaultRoute="sec5-eth0")
+    secureclient6 = self.addHost('sec6',mac='00:00:00:00:00:15',ip='40.2.5.50',defaultRoute="sec6-eth0")
 
     #switch for airgapped floor
     agfsw1 = self.addSwitch('s4')
 
     self.addLink(agfsw1,secureclient1,port1=1,port2=0)
     self.addLink(agfsw1,secureclient2,port1=2,port2=0)
+    self.addLink(agfsw1,secureclient3,port1=3,port2=0)
+    self.addLink(agfsw1,secureclient4,port1=4,port2=0)
+    self.addLink(agfsw1,secureclient5,port1=5,port2=0)
+    self.addLink(agfsw1,secureclient6,port1=6,port2=0)
 
     #---------------------------------------------------end floor 2 and agf
     
