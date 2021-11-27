@@ -9,35 +9,7 @@ from mininet.node import RemoteController
 
 class final_topo(Topo):
   def build(self):
-    # Examples!
-    # Create a host with a default route of the ethernet interface. You'll need to set the
-    # default gateway like this for every host you make on this assignment to make sure all 
-    # packets are sent out that port. Make sure to change the h# in the defaultRoute area
-    # and the MAC address when you add more hosts!
-    # h1 = self.addHost('h1',mac='00:00:00:00:00:01',ip='1.1.1.1/24', defaultRoute="h1-eth0")
-    # h2 = self.addHost('h2',mac='00:00:00:00:00:02',ip='2.2.2.2/24', defaultRoute="h2-eth0")
 
-    # Create a switch. No changes here from Lab 1.
-    # s1 = self.addSwitch('s1')
-
-    # Connect Port 8 on the Switch to Port 0 on Host 1 and Port 9 on the Switch to Port 0 on 
-    # Host 2. This is representing the physical port on the switch or host that you are 
-    # connecting to.
-    #
-    # IMPORTANT NOTES: 
-    # - On a single device, you can only use each port once! So, on s1, only 1 device can be
-    #   plugged in to port 1, only one device can be plugged in to port 2, etc.
-    # - On the "host" side of connections, you must make sure to always match the port you 
-    #   set as the default route when you created the device above. Usually, this means you 
-    #   should plug in to port 0 (since you set the default route to h#-eth0).
-    #
-    # self.addLink(s1,h1, port1=8, port2=0)
-    # self.addLink(s1,h2, port1=9, port2=0)
-        #self.addLink(f1sw1,laptop, port1=1,port2=0)
-    #self.addLink(f1sw1,labmachine,port1=2,port2=0)
-  
-    # ------------------------------------------ Creating and testing floor 1
-    # Setting up floor 1 devices
 
     f1sw1 = self.addSwitch('s1')
 
@@ -90,7 +62,9 @@ class final_topo(Topo):
     self.addLink(agfsw1,secureclient6,port1=6,port2=0)
 
     #---------------------------------------------------end floor 2 and agf
-    
+    # Mininet and Python prefers the use of names without underscores
+    # Named as clear as I could.
+
     #setting up webserver and data center switch
     webserver = self.addHost('webserver',mac='00:00:00:00:00:08',ip='30.1.4.66',defaultRoute="webserver-eth0")
 
@@ -107,6 +81,7 @@ class final_topo(Topo):
 
 
     # testing core 
+    # ports auto asssigned so nameing each port pair not necessasary
 
     core = self.addSwitch('s5')
 
