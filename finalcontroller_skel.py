@@ -1,33 +1,4 @@
 # Final Skeleton
-#
-# Hints/Reminders from Lab 3:
-#
-# To check the source and destination of an IP packet, you can use
-# the header information... For example:
-#
-# ip_header = packet.find('ipv4')
-#
-# if ip_header.srcip == "1.1.1.1":
-#   print "Packet is from 1.1.1.1"
-#
-# Important Note: the "is" comparison DOES NOT work for IP address
-# comparisons in this way. You must use ==.
-# 
-# To send an OpenFlow Message telling a switch to send packets out a
-# port, do the following, replacing <PORT> with the port number the 
-# switch should send the packets out:
-#
-#    msg = of.ofp_flow_mod()
-#    msg.match = of.ofp_match.from_packet(packet)
-#    msg.idle_timeout = 30
-#    msg.hard_timeout = 30
-#
-#    msg.actions.append(of.ofp_action_output(port = <PORT>))
-#    msg.data = packet_in
-#    self.connection.send(msg)
-#
-# To drop packets, simply omit the action.
-#
 
 from pox.core import core
 import pox.openflow.libopenflow_01 as of
@@ -56,11 +27,10 @@ class Final (object):
     # You should use these to determine where a packet came from. To figure out where a packet 
     # is going, you can use the IP header information.
     if switch_id != 4:
-      #Untrusted Host cannot send ICMP traffic to any of the devices
+    #Untrusted Host cannot send ICMP traffic to any of the devices
     # on floor1 and floor2, or the Web Server.
     #Untrusted Host cannot send any IP traffic to the Web Server.
       if switch_id == 5 and port_on_switch == 7:
-        print("Switch 5 port 7")
         msg = of.ofp_flow_mod()
         msg.match.dl_type = 0x0800 #ICMP
         msg.match.nw_dst = '104.24.32.100'
@@ -92,28 +62,17 @@ class Final (object):
         # End untrust host -----------------------------------------------
 
       elif switch_id == 5 and port_on_switch == 6:
-        print("Switch 5 port 6")
         msg = of.ofp_flow_mod()
         msg.match.dl_type = 0x0800 #ICMP
         msg.match.nw_dst = '108.44.83.103'
         out = of.OFPP_NORMAL
         msg.actions.append(of.ofp_action_output(port = out))
         self.connection.send(msg)
-
-        # Any any arp, accept
-        # msg = of.ofp_flow_mod()
-        # msg.match.dl_type = 0x0806 #ARP
-        # msg.match.nw_dst = '108.44.83.103'
-        # out = of.OFPP_NORMAL
-        # msg.actions.append(of.ofp_action_output(port = out))
-        # self.connection.send(msg)
-        
+        # Blocking of untrusted ICMP
         # #  End trust host -----------------------------------------------
-      #elif switch_id ==5 and port_on_switch
 
       if switch_id == 6:
-        # Web server blcks Thost
-        print("in web")
+        # Web server blocks Thost
         msg = of.ofp_flow_mod()
         msg.match.dl_type = 0x0800 #ICMP
         msg.match.nw_dst = '104.24.32.100'
@@ -201,6 +160,7 @@ class Final (object):
       msg.match = match
       self.connection.send(msg)
 
+    # start of secure floor communication
     if switch_id == 4:
       msg = of.ofp_flow_mod()
       msg.match.dl_type = 0x0800 #ICMP
@@ -298,56 +258,6 @@ class Final (object):
       out = of.OFPP_NORMAL
       msg.actions.append(of.ofp_action_output(port = out))
       self.connection.send(msg)
-
-    # Secure Floor Flow Table extra code (not needed)---------------------------------
-    if switch_id == 4 and port_on_switch == 1:
-      # Start ping all 
-      # ICMP pingall should pass
-      # print("In switch 4 port 1")
-      msg = of.ofp_flow_mod()
-      msg.match.dl_type = 0x0800 #ICMP
-      msg.match.nw_proto = 1
-      msg.match.nw_dst = '40.2.5.10'
-      out = of.OFPP_NORMAL
-      msg.actions.append(of.ofp_action_output(port = out))
-      self.connection.send(msg)
-
-      # Any any arp, accept
-      msg = of.ofp_flow_mod()
-      msg.match.dl_type = 0x0806 #ARP
-      msg.match.nw_dst = '40.2.5.10'
-      out = of.OFPP_NORMAL
-      msg.actions.append(of.ofp_action_output(port = out))
-      self.connection.send(msg)
-      #End ping all
-
-
-    if switch_id == 4 and port_on_switch == 2:
-      # Start ping all 
-      # ICMP pingall should pass
-      # print("In switch 4 port 2")
-      msg = of.ofp_flow_mod()
-      msg.match.dl_type = 0x0800 #ICMP
-      msg.match.nw_proto = 1
-      msg.match.nw_dst = '40.2.5.0'
-      out = of.OFPP_NORMAL
-      msg.actions.append(of.ofp_action_output(port = out))
-      self.connection.send(msg)
-
-      # Any any arp, accept
-      msg = of.ofp_flow_mod()
-      msg.match.dl_type = 0x0806 #ARP
-      msg.match.nw_dst = '40.2.5.0'
-      out = of.OFPP_NORMAL
-      msg.actions.append(of.ofp_action_output(port = out))
-      self.connection.send(msg)
-      #End ping all
-    # End Secure Floor -------------------------------------------------
-
-    # ------------------------------
-    
-
-
 
 
   def _handle_PacketIn (self, event):
