@@ -179,6 +179,21 @@ class Final (object):
       self.connection.send(msg)
       #End ping all
 
+      # IP can be sent
+      msg = of.ofp_flow_mod()
+      msg.match.dl_type = 0x0800 #ICMP
+      msg.match.nw_proto = 4 #IP
+      out = of.OFPP_NORMAL
+      msg.actions.append(of.ofp_action_output(port = out))
+      self.connection.send(msg)
+
+      # TCP can be sent
+      msg = of.ofp_flow_mod()
+      msg.match.dl_type = 0x0800 #ICMP
+      msg.match.nw_proto = 6 #TCP
+      msg.match.nw_dst = '104.24.32.100'
+      self.connection.send(msg)
+
       #any other ipv4 drop
       msg = of.ofp_flow_mod()
       msg.match.dl_type = 0x0800 
