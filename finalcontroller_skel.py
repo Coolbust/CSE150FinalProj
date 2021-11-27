@@ -46,6 +46,24 @@ class Final (object):
         msg.actions.append(of.ofp_action_output(port = out))
         self.connection.send(msg)
 
+        #Untrust host can send to Trust host
+
+        #Untrust host can send IP traffic but not to webserver
+        # blocking IP traffic to webserver
+        msg = of.ofp_flow_mod()
+        msg.match.dl_type = 0x0800 #ICMP
+        msg.match.nw_proto = 4
+        msg.match.nw_dst = '30.1.4.66'
+        self.connection.send(msg)
+
+        #Untrust host can send IP
+        msg = of.ofp_flow_mod()
+        msg.match.dl_type = 0x0800 #ICMP
+        msg.match.nw_proto = 4 #IP
+        out = of.OFPP_NORMAL
+        msg.actions.append(of.ofp_action_output(port = out))
+        self.connection.send(msg)
+
         #any other ipv4 drop
         msg = of.ofp_flow_mod()
         msg.match.dl_type = 0x0800 
@@ -68,10 +86,17 @@ class Final (object):
         out = of.OFPP_NORMAL
         msg.actions.append(of.ofp_action_output(port = out))
         self.connection.send(msg)
-        # Blocking of untrusted ICMP
+        # Uhost can talk to Thost
         # #  End trust host -----------------------------------------------
 
       if switch_id == 6:
+        #Web server blocks TCP from Thost
+        msg = of.ofp_flow_mod()
+        msg.match.dl_type = 0x0800 #ICMP
+        msg.match.nw_proto = 6 #TCP
+        msg.match.nw_dst = '104.24.32.100'
+        self.connection.send(msg)
+
         # Web server blocks Thost
         msg = of.ofp_flow_mod()
         msg.match.dl_type = 0x0800 #ICMP
@@ -91,6 +116,7 @@ class Final (object):
         msg.match.nw_dst = '104.24.32.100'
         self.connection.send(msg)
 
+        # Floor 1 blocks Floor 2
         msg = of.ofp_flow_mod()
         msg.match.dl_type = 0x0800 #ICMP
         msg.match.nw_dst = '10.2.7.10'
@@ -257,6 +283,20 @@ class Final (object):
       msg.match.nw_dst = '40.2.5.50'
       out = of.OFPP_NORMAL
       msg.actions.append(of.ofp_action_output(port = out))
+      self.connection.send(msg)
+
+      #any other ipv4 drop
+      msg = of.ofp_flow_mod()
+      msg.match.dl_type = 0x0800 
+      match = of.ofp_match()
+      msg.match = match
+      self.connection.send(msg)
+
+      #any other arg drop
+      msg = of.ofp_flow_mod()
+      msg.match.dl_type = 0x0806
+      match = of.ofp_match()
+      msg.match = match
       self.connection.send(msg)
 
 
